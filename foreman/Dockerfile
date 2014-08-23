@@ -23,10 +23,11 @@ RUN apt-get update; \
 RUN mkdir /home/app/foreman
 ADD foreman /home/app/foreman
 RUN chown -R app /home/app/foreman
-WORKDIR /home/app/foreman
 
+WORKDIR /home/app/foreman
 RUN sudo -u app -H bundle install --path vendor/bundle
 
+# somehow this is required
 RUN mkdir /home/app/foreman/tmp
 RUN chown -R app /home/app/foreman/tmp
 
