@@ -14,26 +14,21 @@ RUN /build/ruby2.0.sh
 RUN /build/nodejs.sh
 
 RUN apt-get update; \
-    apt-get install -y libmysqlclient-dev; \
-    apt-get install -y libpq-dev; \
-    apt-get install -y libvirt-dev; \
-    apt-get install -y libsqlite3-dev
+    apt-get install -y libmysqlclient-dev
 
 # the app
-RUN mkdir /home/app/foreman
-ADD src/foreman /home/app/foreman
-RUN chown -R app /home/app/foreman
+RUN mkdir /home/app/webapp
+ADD src/webapp /home/app/webapp
+RUN chown -R app /home/app/webapp
 
-WORKDIR /home/app/foreman
+WORKDIR /home/app/webapp
 RUN sudo -u app -H bundle install --path vendor/bundle
 
-# somehow this is required
-RUN mkdir /home/app/foreman/tmp
-RUN chown -R app /home/app/foreman/tmp
-
 # nginx
-ADD files/foreman.conf /etc/nginx/sites-enabled/foreman.conf
+ADD files/webapp.conf /etc/nginx/sites-enabled/webapp.conf
 RUN rm -f /etc/service/nginx/down
+
+#EXPOSE 80
 
 # ssh
 #RUN /usr/sbin/enable_insecure_key
